@@ -34,8 +34,8 @@ var Scene = function(options) {
 
     // create the renderer
     self.renderer = new THREE.WebGLRenderer();
-    // self.renderer.localClippingEnabled = true;
-    // // self.renderer.setPixelRatio( window.devicePixelRatio );
+    self.renderer.localClippingEnabled = true;
+    
     // set the size and append it to the document
     self.renderer.setSize( width, height );
     document.getElementById(options.container).appendChild( self.renderer.domElement );
@@ -45,8 +45,6 @@ var Scene = function(options) {
     var controls = new THREE.OrbitControls( self.camera, self.renderer.domElement );
     // controls.target.set( 0, 1, 0 );
     controls.update();
-
-    /* add the checkboard floor to the scene */
 
     self.public =  {
 

@@ -14,6 +14,7 @@ var App = App || {};
     {
         // create a new scene
         App.scene = new Scene({container:"scene"});
+        App.scene2 = new Scene({container:"scene2"});
 
         // initialize the particle system
         var particleSystem = new ParticleSystem();
@@ -21,10 +22,10 @@ var App = App || {};
 
         //add the particle system to the scene
         App.scene.addObject( particleSystem.getParticleSystems());
-
+        App.scene2.addObject(particleSystem.get2DView());
         // render the scene
         App.scene.render();
-
+        App.scene2.render();
     };
 
 }) ();

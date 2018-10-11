@@ -15,7 +15,7 @@ var ParticleSystem = function() {
 
     // scene graph group for the particle system
     var sceneObject = new THREE.Group();
-
+    var scene2Object = new THREE.Group();
     // bounds of the data
     var bounds = {};
 
@@ -34,7 +34,7 @@ var ParticleSystem = function() {
         var cylinder = new THREE.Mesh( geometry, material );
 
         // add the containment to the scene
-        // sceneObject.add(cylinder);
+        // scene2Object.add(cylinder);
     };
 
     // creates the particle system
@@ -47,7 +47,7 @@ var ParticleSystem = function() {
         var positions = [];
         var colors = [];
         var color = new THREE.Color();
-        // var localPlane = new THREE.Plane( new THREE.Vector3( 0, 0, -1 ), 0.1 );
+        var localPlane = new THREE.Plane( new THREE.Vector3( 0, 0, -1 ), 0.9 );
         // var another = [];
 
         var n = 100, n2 = n /2; // particles spread in the cube
@@ -66,29 +66,36 @@ var ParticleSystem = function() {
         }
 
         // console.log(another);
-        console.log(colors);
+        // console.log(colors);
         geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
         geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 1 ) );
 
         geometry.computeBoundingSphere();
 
         //
-
-        var material = new THREE.PointsMaterial( { size: 1, vertexColors: THREE.VertexColors
-            // clippingPlanes: [ localPlane ],
-            // clipShadows: true 
+        var material = new THREE.PointsMaterial( { size: 0.6, vertexColors: THREE.VertexColors });
+        var material2 = new THREE.PointsMaterial( { size: 0.6, vertexColors: THREE.VertexColors, 
+            clippingPlanes: [ localPlane ],
+            clipShadows: true 
         } );
 
+        // gui controls
+        var gui = new dat.GUI(),
+                    folderLocal = gui.addFolder( "Local Clipping" ),
+                    propsLocal = {
+                        get 'Plane'() { return localPlane.constant; },
+                        set 'Plane'( v ) { localPlane.constant = v }
+                    };
+
+                folderLocal.add( propsLocal, 'Plane', -5, 5 );
+
         points = new THREE.Points( geometry, material );
+        var points2 = new THREE.Points( geometry, material2 );
         // points.rotation.x = - Math.PI / 2;
         sceneObject.add( points );
         
+        scene2Object.add( points2 );
     };
-
-    // Second scene
-    self.view2D = function() {
-        
-    }
 
     // data loading function
     self.loadData = function(file){
@@ -146,6 +153,11 @@ var ParticleSystem = function() {
         // accessor for the particle system
         getParticleSystems : function() {
             return sceneObject;
+        },
+
+        // accessor for 2D particles
+        get2DView : function() {
+            return scene2Object;
         }
     };
 
